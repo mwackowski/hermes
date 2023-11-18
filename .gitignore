@@ -1,4 +1,8 @@
 .venv
 .env
 
+logs/
+
+__pycache__
+
 _secrets.py
