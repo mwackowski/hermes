@@ -1,13 +1,15 @@
-import requests
+import os
 import json
+import requests
+from dotenv import load_dotenv
 
-from common._secrets import OPENAI_API_KEY  # pylint: disable=import-error
+load_dotenv()
 
 
 BASE_URL = "https://api.openai.com/v1/{endpoint}"
 
 HEADER = {
-    "Authorization": f"Bearer {OPENAI_API_KEY}",
+    "Authorization": f"Bearer {os.environ['OPENAI_API_KEY']}",
 }
 
 

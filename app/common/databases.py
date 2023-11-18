@@ -10,7 +10,7 @@ from qdrant_client.http import models
 import pandas as pd
 
 sys.path.append("..")
-from common._secrets import DB_PARENT_DIR
+from app.common._secrets import DB_PARENT_DIR
 from common.utils import chunks
 
 

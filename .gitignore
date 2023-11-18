@@ -1,7 +1,7 @@
 .venv
 .env
 
-logs/
+*.log
 
 __pycache__
 
