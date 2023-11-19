@@ -4,3 +4,4 @@ black
 pandas
 langchain
 openai
+qdrant-client
