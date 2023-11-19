@@ -6,3 +6,5 @@
 __pycache__
 
 _secrets.py
+
+test_endpoints.ipynb
