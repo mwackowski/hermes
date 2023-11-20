@@ -1,7 +1,12 @@
+import os
+
 from datetime import date
 import logging
 from logging.config import dictConfig
 
+from config.const import PROJECT_NAME
+
+LOG_DIR = os.getcwd().replace(PROJECT_NAME, f'{PROJECT_NAME}/logs')
 
 LOG_LEVEL: str = "DEBUG"
 FORMAT: str = (
@@ -34,7 +39,8 @@ logging_config = {
         "file": {
             "class": "logging.handlers.RotatingFileHandler",
             "formatter": "filr",
-            "filename": (f"logs/{date.today().strftime('%Y-%m-%d')}.log"),
+            "filename": (f"{LOG_DIR}/{date.today().strftime('%Y-%m-%d')}.log"),
+            # "filename": (f"logs/{date.today().strftime('%Y-%m-%d')}.log"),
             "encoding": "utf-8",
             "level": LOG_LEVEL,
         },

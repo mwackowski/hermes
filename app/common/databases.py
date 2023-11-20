@@ -34,7 +34,7 @@ def insert_into_knowledge_simple(content):
     uuid = str(uuid4())
     sql = 'insert into knowledge_simple(uuid, insert_date, content) values (%s, %s, %s)'
     try:
-        cur.execute(sql, (uuid, today, question))
+        cur.execute(sql, (uuid, today, content))
         conn.commit()
         logger.info('Inserted successfully')
     except Exception as e:

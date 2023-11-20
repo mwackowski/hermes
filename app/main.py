@@ -1,3 +1,4 @@
+import json
 from typing import Dict
 import uvicorn
 from fastapi import FastAPI, Query, Request
@@ -52,7 +53,7 @@ async def ownapipro_task(input: Dict[str, str]):
         # )
         # logger.info(ai_resp)
     else:
-        insert_into_knowledge_simple()
+        insert_into_knowledge_simple(json.dumps(question))
 
 
     return {"reply": 'done'}
