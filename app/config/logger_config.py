@@ -6,7 +6,7 @@ from logging.config import dictConfig
 
 from config.const import PROJECT_NAME
 
-LOG_DIR = os.getcwd().replace(PROJECT_NAME, f'{PROJECT_NAME}/logs')
+LOG_DIR = os.getcwd().replace(PROJECT_NAME, f"{PROJECT_NAME}/logs")
 
 LOG_LEVEL: str = "DEBUG"
 FORMAT: str = (

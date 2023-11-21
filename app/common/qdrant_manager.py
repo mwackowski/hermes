@@ -69,5 +69,3 @@ def query_collection(embedded_query, collection_name, limit=1):
         query_filter=query_filter,
     )
     return search
-
-

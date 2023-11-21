@@ -46,21 +46,22 @@ async def ownapipro_task(input: Dict[str, str]):
     if max_tokens:
         max_tokens = min(int(max_tokens), 100)
 
-    if '?' in question:
-        logger.info('processing in AI')
+    if "?" in question:
+        logger.info("processing in AI")
         knowledge_data = get_knowledge_data()
         ai_resp = send_chat_completion(
-        "gpt-3.5-turbo", system_content=knowledge_data, user_content=question, max_tokens=max_tokens
+            "gpt-3.5-turbo",
+            system_content=knowledge_data,
+            user_content=question,
+            max_tokens=max_tokens,
         )
-        msg = f'USER: {question}\nASSISTANT: {get_message(ai_resp)}'
+        msg = f"USER: {question}\nASSISTANT: {get_message(ai_resp)}"
         insert_into_knowledge_simple(msg)
         logger.info(ai_resp)
     else:
-        insert_into_knowledge_simple(question, source='USER')
+        insert_into_knowledge_simple(question, source="USER")
 
-
-    return {"reply": 'done'}
-
+    return {"reply": "done"}
 
 
 if __name__ == "__main__":
