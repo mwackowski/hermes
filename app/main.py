@@ -47,11 +47,10 @@ async def ownapipro_task(input: Dict[str, str]):
         max_tokens = min(int(max_tokens), 100)
 
     if "?" in question:
-        logger.info("processing in AI")
         knowledge_data = get_knowledge_data()
         ai_resp = send_chat_completion(
             "gpt-3.5-turbo",
-            system_content=knowledge_data,
+            system_content=f'Provide information using following context in the first place:\n###Context: {knowledge_data}\nBe concise.',
             user_content=question,
             max_tokens=max_tokens,
         )
