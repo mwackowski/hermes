@@ -58,10 +58,11 @@ async def ownapipro_task(input: Dict[str, str]):
         msg = f"USER: {question}\nASSISTANT: {get_message(ai_resp)}"
         insert_into_knowledge_simple(msg)
         logger.info(ai_resp)
+        return {"reply": get_message(ai_resp)}
     else:
         insert_into_knowledge_simple(question, source="USER")
-
-    return {"reply": get_message(ai_resp)}
+        return {"reply": "Saved into knowledge db."}
+    
 
 
 if __name__ == "__main__":
