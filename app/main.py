@@ -61,7 +61,7 @@ async def ownapipro_task(input: Dict[str, str]):
     else:
         insert_into_knowledge_simple(question, source="USER")
 
-    return {"reply": "done"}
+    return {"reply": get_message(ai_resp)}
 
 
 if __name__ == "__main__":
