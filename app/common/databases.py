@@ -10,7 +10,7 @@ import psycopg2
 
 sys.path.append("..")
 
-from app.config.config_reader import config, DB_PARENT_DIR
+from config.config_reader import config, DB_PARENT_DIR
 from config.logger_config import set_logger
 
 
@@ -27,14 +27,14 @@ def get_postgres_conn(db_name: str = 'aidevs'):
     return psycopg2.connect(**params)
 
 
-def insert_into_knowledge_simple(content):
+def insert_into_knowledge_simple(content, source='AI'):
     conn = get_postgres_conn()
     cur = conn.cursor()
     today = datetime.date.today()
     uuid = str(uuid4())
-    sql = 'insert into knowledge_simple(uuid, insert_date, content) values (%s, %s, %s)'
+    sql = 'insert into knowledge_simple(uuid, insert_date, content, source) values (%s, %s, %s, %s)'
     try:
-        cur.execute(sql, (uuid, today, content))
+        cur.execute(sql, (uuid, today, content, source))
         conn.commit()
         logger.info('Inserted successfully')
     except Exception as e:
@@ -53,12 +53,13 @@ def create_database_from_json(data: Dict, database_name: str):
 
 def read_table(table_name: str, conn = None) -> pd.DataFrame:
     if not conn:
-        conn = get_conn()
-    return pd.read_sql_query(f"select * from {table_name}", conn)
+        with get_postgres_conn() as conn:
+            data = pd.read_sql_query(f"select * from {table_name}", conn)
+    return data
 
 
 def query_table_by_uuid(table_name: str, uuid: str, conn = None) -> pd.DataFrame:
     if not conn:
-        conn = get_conn()
+        conn = get_postgres_conn()
     return pd.read_sql_query(f"select * from {table_name} where uuid = '{uuid}'", conn)
 
