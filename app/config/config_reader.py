@@ -1,9 +1,6 @@
 from configparser import ConfigParser
 from os.path import join, dirname, abspath
 
-# TODO - remove after migration to postres
-DB_PARENT_DIR = "/home/wladzioo/aidevs"
-
 
 def config(filename="database.ini", section="postgresql"):
     parser = ConfigParser()

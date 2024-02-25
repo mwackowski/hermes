@@ -1,3 +1,4 @@
+from logging import Logger
 import os
 import json
 import requests
@@ -14,15 +15,23 @@ HEADER = {
 
 
 def make_request(
-    endpoint: str, data: dict = None, files: dict = None, header: dict = HEADER
+    endpoint: str,
+    data: dict = None,
+    files: dict = None,
+    header: dict = HEADER,
+    method: str = "POST",
 ):
+    req = {
+        "POST": {"fn": requests.post, "data": json.dumps(data)},
+        "GET": {"fn": requests.get, "data": data},
+    }[method]
+    fn, data = req["fn"], req["data"]
+
     if not files:
         header["Content-Type"] = "application/json"
-        resp = requests.post(
-            BASE_URL.format(endpoint=endpoint), headers=header, data=json.dumps(data)
-        )
+        resp = fn(BASE_URL.format(endpoint=endpoint), headers=header, data=data)
     else:
-        resp = requests.post(
+        resp = fn(
             BASE_URL.format(endpoint=endpoint), headers=header, data=data, files=files
         )
     return json.loads(resp.text)
@@ -36,6 +45,10 @@ def send_embeddings(input_msg: str, model_version: str):
     return make_request(
         endpoint="embeddings", data={"input": input_msg, "model": model_version}
     )
+
+
+def get_models():
+    return make_request(endpoint="models", method="GET")
 
 
 def send_transcription(
@@ -66,19 +79,22 @@ def send_chat_completion(
     user_content: str = "",
     temperature: float = 0,
     max_tokens: int = 0,
+    logger: Logger = None
 ):
-    return make_request(
-        endpoint="chat/completions",
-        data={
-            "model": model_version,
-            "messages": [
-                {"role": "system", "content": system_content},
-                {"role": "user", "content": user_content},
-            ],
-            "temperature": temperature,
-            "max_tokens": max_tokens,
-        },
-    )
+    data = {
+        "model": model_version,
+        "messages": [
+            {"role": "user", "content": user_content},
+        ],
+        "temperature": temperature,
+    }
+    if system_content:
+        data['messages'].insert(0, {"role": "system", "content": system_content})
+    if max_tokens:
+        data["max_tokens"] = max_tokens
+    if logger:
+        logger.info(f'Request for openai:\n{data}')
+    return make_request(endpoint="chat/completions", data=data)
 
 
 def send_vision_request(

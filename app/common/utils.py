@@ -14,6 +14,8 @@ def get_message(ai_response):
     'finish_reason': 'stop'}],
     'usage': {'prompt_tokens': 75, 'completion_tokens': 4, 'total_tokens': 79}}
     """
+    if ai_response.get("error"):
+        return ai_response
     return ai_response["choices"][0]["message"]["content"]
 
 
