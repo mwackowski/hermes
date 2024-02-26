@@ -2,7 +2,7 @@ import os
 import sys
 from typing import Dict
 from threading import Thread
-import logging
+
 from fastapi import FastAPI, Request, Response, status
 from fastapi.responses import HTMLResponse
 from pydantic_settings import BaseSettings
@@ -20,11 +20,7 @@ load_dotenv()
 logger = set_logger()
 
 
-class Settings(BaseSettings):
-    USE_NGROK: bool = os.environ.get("USE_NGROK", "False") == "True"
-    BASE_URL: str = "http://localhost:8080"
-        
-settings = Settings()
+
 
 
 def init_webhooks(base_url):
@@ -48,7 +44,12 @@ def engrok_setup():
 
 app = FastAPI()
 
-if settings.USE_NGROK and os.environ.get("NGROK_AUTHTOKEN"):
+if os.environ.get("NGROK_AUTHTOKEN"):
+    class Settings(BaseSettings):
+        USE_NGROK: bool = os.environ.get("USE_NGROK", "False") == "True"
+        BASE_URL: str = "http://localhost:8080"
+        
+    settings = Settings()
     engrok_setup()
 
 
